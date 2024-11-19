@@ -1,6 +1,7 @@
 "use client";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ConversationButton } from "@/components/ConversationButton";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export interface GPTMessage {
@@ -9,6 +10,7 @@ export interface GPTMessage {
 }
 
 export default function AppPage() {
+  const router = useRouter();
   const [model, setModel] = useState<string>("gpt-4o");
   const [message, setMessage] = useState<string>("");
   const [conversationId, setConversationId] = useState<number>(0);
@@ -76,8 +78,12 @@ export default function AppPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch("/api/chat/conversations");
-      const data = await res.json();
-      setConversationList(data);
+      if (res.ok) {
+        const data = await res.json();
+        setConversationList(data);
+      } else {
+        router.replace("/login");
+      }
     };
 
     fetchData();
@@ -87,12 +93,12 @@ export default function AppPage() {
     <main className="grid grid-cols-6 grid-rows-1 w-full h-full min-h-screen">
       <div
         id="sidebar"
-        className="col-span-1 row-span-1 border-r-[1px] border-slate-500 bg-slate-800"
+        className="col-span-1 row-span-1 border-r border-[#333]"
       >
         <h1>Shuttle</h1>
         <div className="p-4">
           <button
-            className="bg-slate-300/50 px-4 py-1 w-full text-left rounded-md"
+            className="px-4 py-1 w-full text-left rounded-md bg-gradient-to-r from-orange-700 to-yellow-400"
             onClick={() => newChat()}
           >
             New chat
@@ -111,9 +117,9 @@ export default function AppPage() {
           </div>
         </div>
       </div>
-      <div className="col-span-5 row-span-1 bg-slate-900 flex flex-col p-4 w-full gap-4 max-h-screen overflow-auto">
+      <div className="col-span-5 row-span-1 flex flex-col p-4 w-full gap-4 max-h-screen overflow-auto">
         <select
-          className="font-bold text-slate-300 w-[15%] bg-slate-700 px-4 py-2"
+          className="font-bold text-slate-300 w-[15%] bg-gray-800 px-4 py-2"
           onChange={(e) => setModel((e.target as HTMLSelectElement).value)}
         >
           <option className="text-black" value="gpt-4o">

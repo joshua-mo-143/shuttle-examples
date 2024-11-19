@@ -206,7 +206,7 @@ pub async fn send_message(
 
     sqlx::query(
         r#"UPDATE conversations
-        SET conversation = COALESCE(conversation, '[]'::JSONB) || $1
+        SET conversation = conversation || $1
         WHERE id = $2"#,
     )
     .bind(json!([{

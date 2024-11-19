@@ -25,10 +25,12 @@ export const ConversationButton = ({
     setConversationId(id);
   }
 
-  const border = active ? "outline-white/25" : "";
+  const isActiveClasses = active
+    ? "bg-gradient-to-r from-orange-700 to-yellow-400 text-slate-200"
+    : "text-white bg-slate-100/10";
   return (
     <button
-      className={`bg-slate-300/50 ${border} px-4 py-1 w-full text-left rounded-md`}
+      className={` ${isActiveClasses} px-4 py-1 w-full text-left rounded-md transition duration-300 hover:bg-gradient-to-r hover:from-orange-700 hover:to-yellow-400`}
       onClick={(e) => handleClick(e)}
     >
       Conversation {id}
